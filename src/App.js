@@ -70,7 +70,7 @@ const filterReducer = (state, action) => {
 };
 
 const App = () => {
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, dispatchTodos] = useReducer(todoReducer, initialTodos);
   const [task, setTask] = useState('');
   const [filter, dispatchFilter] = useReducer(filterReducer, 'ALL');
 
@@ -79,26 +79,34 @@ const App = () => {
   };
 
   const handleSubmit = event => {
+    // if a task is currently stored in state, dipatch ADD_TODO action:
     if (task) {
-      // add task to to-dos using .concat add the task to existing todos in state:
-      setTodos(todos.concat({id: uuid(), task, complete: false}));
+      dispatchTodos({ type: 'ADD_TODO', task, id: uuid() })
     }
     // reset/clear input field:
     setTask('');
     event.preventDefault();
   };
 
-  const handleTodoCheckboxChange = id => {
-    // set Todos to a new array changing only the complete property of the todo matching the input id:
-    setTodos(
-      todos.map(todo => {
-        if (todo.id === id) {
-          return { ...todo, complete: !todo.complete };
-        } else {
-          return todo
-        }
-      })
-    );
+  const handleTodoCheckboxChange = todo => {
+    // Use useReducer via dispatchTodos. Set payload 'type' to opposite of current todo 'complete' status:
+    dispatchTodos({
+      type: todo.complete ? 'UNDO_TODO' : 'DO_TODO',
+      id: todo.id
+    });
+
+    // *** alt method with useState:
+    // set Todos to a new array changing only the 'complete' property of the todo matching the input id:
+    // setTodos(
+    //   todos.map(todo => {
+    //     if (todo.id === id) {
+    //       return { ...todo, complete: !todo.complete };
+    //     } else {
+    //       return todo
+    //     }
+    //   })
+    // );
+    
   };
 
   const handleShowAll = () => {
@@ -144,14 +152,21 @@ const App = () => {
               <input
                 type='checkbox'
                 checked={todo.complete}
-                onChange={() => handleTodoCheckboxChange(todo.id)}
+                onChange={() => handleTodoCheckboxChange(todo)}
               />
               {todo.task}
             </label>
           </li>
         ))}
       </ul>
-      <input type='text' value={task} onChange={handleInputChange} />
+      <form onSubmit={handleSubmit}>
+        <input 
+          type='text' 
+          value={task} 
+          onChange={handleInputChange} 
+        />
+        <button type='submit'>Add Todo</button>
+      </form>
     </div>
   );
 };
