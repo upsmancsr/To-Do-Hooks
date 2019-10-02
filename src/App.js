@@ -1,5 +1,12 @@
-import React, { useState, useReducer } from 'react';
+import React, { 
+  useState, 
+  useReducer, 
+  createContext, 
+  useContext 
+} from 'react';
 import uuid from 'uuid/v4';
+
+const TodoContext = createContext(null);
 
 const initialTodos = [
   {
@@ -73,45 +80,7 @@ const filterReducer = (state, action) => {
 const App = () => {
   // Define variables to store in state, as well as the methods to update their values:
   const [todos, dispatchTodos] = useReducer(todoReducer, initialTodos);
-  const [task, setTask] = useState('');
   const [filter, dispatchFilter] = useReducer(filterReducer, 'ALL');
-
-  const handleInputChange = event => {
-    setTask(event.target.value);
-  };
-
-  const handleSubmit = event => {
-    // if a task is currently stored in state, dipatch ADD_TODO action:
-    if (task) {
-      dispatchTodos({ type: 'ADD_TODO', task, id: uuid() })
-    }
-    // reset/clear input field:
-    setTask('');
-    event.preventDefault();
-  };
-
-  const handleTodoCheckboxChange = todo => {
-    // Use useReducer via dispatchTodos. Set payload 'type' to opposite of current todo 'complete' status:
-    dispatchTodos({
-      type: todo.complete ? 'UNDO_TODO' : 'DO_TODO',
-      id: todo.id
-    });
-
-    // *** alt method with useState
-    // NOTE: handleTodoCheckboxChange takes todo id as arg instead of todo.
-    // set Todos to a new array changing only the 'complete' property of the todo matching the input id:
-    // setTodos(
-    //   todos.map(todo => {
-    //     if (todo.id === id) {
-    //       return { ...todo, complete: !todo.complete };
-    //     } else {
-    //       return todo
-    //     }
-    //   })
-    // );
-  };
-
-  
 
   const filteredTodos = todos.filter(todo => {
     // 'filter' variable below is stored in state
@@ -128,11 +97,13 @@ const App = () => {
   });
 
   return (
+    <TodoContext.Provider value={dispatchTodos}>
     <div>
       <Filter dispatch={dispatchFilter} />
-      <TodoList dispatch={dispatchTodos} todos={filteredTodos} />
-      <AddTodo dispatch={dispatchTodos} />
+      <TodoList todos={filteredTodos} />
+      <AddTodo />
     </div>
+    </TodoContext.Provider>
   );
 };
 
@@ -190,7 +161,8 @@ const TodoItem = ({ dispatch, todo }) => {
   );
 };
 
-const AddTodo = ({ dispatch }) => {
+const AddTodo = () => {
+  const dispatch = useContext(TodoContext);
   const [task, setTask] = useState('');
   const handleSubmit = event => {
     if (task) {
