@@ -70,6 +70,7 @@ const filterReducer = (state, action) => {
 };
 
 const App = () => {
+  // Define variable to store in state, as well as the methods to update their values:
   const [todos, dispatchTodos] = useReducer(todoReducer, initialTodos);
   const [task, setTask] = useState('');
   const [filter, dispatchFilter] = useReducer(filterReducer, 'ALL');
@@ -95,7 +96,8 @@ const App = () => {
       id: todo.id
     });
 
-    // *** alt method with useState:
+    // *** alt method with useState
+    // NOTE: handleTodoCheckboxChange takes todo id as arg instead of todo.
     // set Todos to a new array changing only the 'complete' property of the todo matching the input id:
     // setTodos(
     //   todos.map(todo => {
@@ -106,7 +108,6 @@ const App = () => {
     //     }
     //   })
     // );
-    
   };
 
   const handleShowAll = () => {
@@ -120,6 +121,7 @@ const App = () => {
   };
 
   const filteredTodos = todos.filter(todo => {
+    // 'filter' variable below is stored in state
     if (filter === 'ALL') {
       return true;
     }
