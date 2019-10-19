@@ -5,6 +5,7 @@ import React, {
   useContext 
 } from 'react';
 import uuid from 'uuid/v4';
+import './App.css';
 
 const TodoContext = createContext(null);
 
@@ -98,8 +99,8 @@ const App = () => {
 
   return (
     <TodoContext.Provider value={dispatchTodos}>
-    <div>
-      <Filter dispatch={dispatchFilter} />
+    <div className="App">
+      <FilterMenu dispatch={dispatchFilter} />
       <TodoList todos={filteredTodos} />
       <AddTodo />
     </div>
@@ -107,7 +108,7 @@ const App = () => {
   );
 };
 
-const Filter = ({ dispatch }) => {
+const FilterMenu = ({ dispatch }) => {
   const handleShowAll = () => {
     dispatch({ type: 'SHOW_ALL'});
   };
@@ -119,7 +120,7 @@ const Filter = ({ dispatch }) => {
   };
 
   return (
-    <div>
+    <div className="FilterMenu">
       <button type="button" onClick={handleShowAll}>
         Show All
       </button>
@@ -134,11 +135,14 @@ const Filter = ({ dispatch }) => {
 };
 
 const TodoList = ({ todos }) => (
-  <ul>
-    {todos.map(todo => (
-      <TodoItem key={todo.id} todo={todo} />
-    ))}
-  </ul>
+  <div className="ToDoList">
+    <h3>To Do Items</h3>
+    <div className="list">
+      {todos.map(todo => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
+    </div>
+  </div>
 );
 
 const TodoItem = ({ todo }) => {
@@ -151,7 +155,6 @@ const TodoItem = ({ todo }) => {
     });
 
   return (
-    <li>
       <label>
         <input
           type="checkbox"
@@ -160,7 +163,6 @@ const TodoItem = ({ todo }) => {
         />
         {todo.task}
       </label>
-    </li>
   );
 };
 
@@ -179,7 +181,7 @@ const AddTodo = () => {
   const handleChange = event => setTask(event.target.value);
   
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="AddTodo" onSubmit={handleSubmit}>
       <input type="text" value={task} onChange={handleChange} />
       <button type="submit">Add Todo</button>
     </form>

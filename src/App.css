@@ -1,22 +1,73 @@
 .App {
-  text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 500px;
+	background-color: #ccc;
 }
 
 .App-logo {
-  height: 40vmin;
+	height: 40vmin;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+	background-color: #282c34;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
+	color: white;
 }
 
 .App-link {
-  color: #09d3ac;
+	color: #09d3ac;
+}
+
+/*  */
+/* Filter Menu */
+/*  */
+
+.FilterMenu {
+	display: flex;
+	justify-content: flex-start;
+	width: 100%;
+}
+
+.FilterMenu button {
+	margin: 5px;
+}
+
+/*  */
+/* ToDoList */
+/*  */
+
+.ToDoList {
+	margin: 5px;
+}
+
+.ToDoList .list {
+	width: 100%;
+	margin: 5px;
+	padding-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+/*  */
+/* AddTodo form */
+/*  */
+
+.AddTodo {
+	margin: 5px;
+	width: 100%;
+}
+
+.AddTodo input {
+	width: 35%;
+	margin-right: 10px;
 }
